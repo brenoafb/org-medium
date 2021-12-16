@@ -275,11 +275,13 @@
                           (or lic org-medium-default-license)))
                (publish-status (if custom-params (org-medium-show-visibility-help)
                                  (or visib org-medium-default-visibility)))
-               (url-request-data (json-encode-plist `(:title ,title
-                                                             :contentFormat ,content-format
-                                                             :content ,content
-                                                             :publishStatus ,publish-status
-                                                             :license ,license)))
+               (url-request-data (encode-coding-string
+                                  (json-encode-plist `(:title         ,title
+                                                       :contentFormat ,content-format
+                                                       :content       ,content
+                                                       :publishStatus ,publish-status
+                                                       :license       ,license))
+                                  'utf-8))
                (url (concat org-medium-apibegin "/users/" org-medium-author-id "/posts")))
           (url-retrieve url (lambda (status) (switch-to-buffer (current-buffer)))))
         (kill-buffer (get-buffer "*Licenses*"))
